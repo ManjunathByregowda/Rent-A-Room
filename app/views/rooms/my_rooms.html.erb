@@ -1,0 +1,31 @@
+<h2 style="color:red;">My Rooms</h2>
+
+<% if @rooms.empty?%>
+	<b style="color:green;">You have not added any rooms</b>
+<%else%>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Room Name</th>
+				<th>Adderss</th>
+				<th>City</th>
+				<th>Price</th>
+				<th>Authorized</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @rooms.each do |room|%>
+				<tr>
+					<td><%= link_to room.name, room_path(room.slug) %></td>
+					<td><%= room.address %></td>
+					<td><%= room.city.name%></td>
+					<td><%= room.price %></td>
+					<td><% if room.is_authorized? %> Yes <%else%> No <%end%></td>
+				</tr>
+			<%end%>
+		</tbody>
+	</table>
+	
+<%end%>
+
+

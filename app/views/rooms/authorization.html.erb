@@ -1,0 +1,18 @@
+<h2>Not authorized Rooms</h2>
+<% if can? :authorization, Room %>
+	<% if @rooms.empty?%>
+		<b>All the rooms are authorized </b>
+	<%else%>
+		<ul>
+			<% @rooms.each do |room|%>
+				<li><%= link_to room.name, room_path(room.slug) %> - <%=room.address%> - <%=room.city.name%> - <%=room.price%></li>
+
+				<%= form_for room do |f|%>
+
+					<%= f.hidden_field :is_authorized, value:"true" %>
+					<%=f.submit "authorize Room" %> 
+				<%end%>
+			<%end%>
+		</ul>
+	<%end%>
+<%end%>

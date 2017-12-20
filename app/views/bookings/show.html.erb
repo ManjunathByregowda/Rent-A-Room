@@ -1,0 +1,22 @@
+<h2>Your Room has Booked for - <%= (@booking.start_date..@booking.end_date).count %> Days </h2>
+
+
+<b>Room Name</b> :- <%= link_to @booking.room.name, room_path(@booking.room) %><br/>
+<b>Room Address</b> :- <%= @booking.room.address %><br/>
+<b>City</b> :- <%= @booking.room.city.name %><br/>
+
+
+
+
+
+
+<b>Start Date</b> :- <%= @booking.start_date%><br/>
+<b>End Date</b> :- <%= @booking.end_date %><br/>
+<b>price</b> :- <h2>$<%=@booking.price%></h2><br/>
+
+
+Thank you For Booking a Room, You will get a confirmation as soon.<br/>
+
+
+
+<%= link_to "back", room_path(@booking.room) %>

@@ -1,0 +1,69 @@
+<%= form_for(@review) do |f| %>
+  <% if @review.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@review.errors.count, "error") %> prohibited this review from being saved:</h2>
+
+      <ul>
+      <% @review.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :review %><br>
+    <%= f.text_area :review %>
+  </div>
+  <div class="field">
+    <%= f.label :food_rating %><br>
+    <%=f.radio_button :food_rating, 1 %> 1
+    <%=f.radio_button :food_rating, 2 %> 2
+    <%=f.radio_button :food_rating, 3 %> 3
+    <%=f.radio_button :food_rating, 4 %> 4
+    <%=f.radio_button :food_rating, 5 %> 5<br/>
+  </div>
+  <div class="field">
+    <%= f.label :cleanliness_rating %><br>
+    <%=f.radio_button :cleanliness_rating, 1 %> 1
+    <%=f.radio_button :cleanliness_rating, 2 %> 2
+    <%=f.radio_button :cleanliness_rating, 3 %> 3
+    <%=f.radio_button :cleanliness_rating, 4 %> 4
+    <%=f.radio_button :cleanliness_rating, 5 %> 5<br/>
+  </div>
+  <div class="field">
+    <%= f.label :safety_rating %><br>
+    <%=f.radio_button :safety_rating, 1 %> 1
+    <%=f.radio_button :safety_rating, 2 %> 2
+    <%=f.radio_button :safety_rating, 3 %> 3
+    <%=f.radio_button :safety_rating, 4 %> 4
+    <%=f.radio_button :safety_rating, 5 %> 5<br/>
+  </div>
+  <div class="field">
+    <%= f.label :facility_rating %><br>
+    <%=f.radio_button :facility_rating, 1 %> 1
+    <%=f.radio_button :facility_rating, 2 %> 2
+    <%=f.radio_button :facility_rating, 3 %> 3
+    <%=f.radio_button :facility_rating, 4 %> 4
+    <%=f.radio_button :facility_rating, 5 %> 5<br/>
+  </div>
+  <div class="field">
+    <%= f.label :locality_rating %><br>
+    <%=f.radio_button :locality_rating, 1 %> 1
+    <%=f.radio_button :locality_rating, 2 %> 2
+    <%=f.radio_button :locality_rating, 3 %> 3
+    <%=f.radio_button :locality_rating, 4 %> 4
+    <%=f.radio_button :locality_rating, 5 %> 5<br/>
+  </div>
+  <div class="field">
+    <%= f.label :room_id %><br>
+    <%= f.number_field :room_id %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

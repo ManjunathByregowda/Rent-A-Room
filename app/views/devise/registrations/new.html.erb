@@ -1,0 +1,219 @@
+<h2>Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+    <span id="emailMsg"></span>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "off" %>
+    <span id="passwordMsg"></span>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    <span id="passwordConfirmationMsg"></span>
+  </div>
+
+  <div class="field">
+    <%= f.label :first_name %><br />
+    <%= f.text_field :first_name %>
+    <span id="firstNameMsg"></span>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name %><br />
+    <%= f.text_field :last_name%>
+    <span id="lastNameMsg"></span>
+  </div>
+
+  <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username, autofocus: true %>
+    <span id="userNameMsg"></span>
+  </div>
+
+  <div class="field">
+    <%= f.label :mobile %><br />
+    <%= f.text_field :mobile %>
+    <span id="mobileMsg"></span>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+
+<script>
+  
+  var userNameHandle = document.getElementById('user_username');
+  var emailHandle = document.getElementById('user_email');
+  var passwordHandle = document.getElementById('user_password');
+  var passwordConfirmationHandle = document.getElementById('user_password_confirmation');
+  var firstNamehandle = document.getElementById('user_first_name');
+  var lastNamehandle = document.getElementById('user_last_name');
+  var mobileHandle = document.getElementById('user_mobile');
+  var registerFormHandle = document.getElementById('new_user'); 
+
+  var userNameMsgHandle = document.getElementById('userNameMsg');
+  var emailMsgHandle = document.getElementById('emailMsg');
+  var passwordMsgHandle = document.getElementById('passwordMsg');
+  var passwordConfirmationMsgHandle = document.getElementById('passwordConfirmationMsg');
+  var firstNameMsgHandle = document.getElementById('firstNameMsg');
+  var lastNameMsgHandle = document.getElementById('lastNameMsg');
+  var mobileMsgHandle = document.getElementById('mobileMsg');
+
+  var userNameFormatter = /^[a-zA-Z ]*$/;
+  var emailFormatter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  var passwordFormatter =  /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  var nameFormatter = /^[a-zA-Z]*$/;
+  var lastNameFormatter = /^[a-zA-Z ]*$/;
+  var mobileFormatter = /^\d{10}$/;
+
+  var errors = {
+    name: false,
+    email: false,
+    password: false,
+    passwordConfirmation: false,
+    firstName: false,
+    lastName: false,
+    mobile: false
+  }
+
+  //userNameHandle.addEventListener('blur',function(){
+  function validateName(){
+    if(userNameHandle.value ==""){
+        userNameMsgHandle.innerHTML = "can't be blank";
+        errors.name = false;
+    }else if(!userNameFormatter.test(userNameHandle.value)){
+        userNameMsgHandle.innerHTML = "Should contain only alphabets";
+        errors.name = false;
+    }else{
+        userNameMsgHandle.innerHTML = "";
+        errors.name = true;
+    }
+  }
+  //},false);
+
+  //emailHandle.addEventListener('blur',function(){
+  function validateEmail(){
+    if(emailHandle.value == ""){
+        emailMsgHandle.innerHTML = "can't be blank";
+        errors.email = false;
+    }else if(!emailFormatter.test(emailHandle.value)){
+        emailMsgHandle.innerHTML = "enter valid email";
+        errors.email = false;
+    }else{
+        emailMsgHandle.innerHTML = "";
+        errors.email = true;
+    }
+  }
+  //},false);
+
+  //passwordHandle.addEventListener('blur',function(){
+  function validatePassword(){
+    if(passwordHandle.value == ""){
+        passwordMsgHandle.innerHTML = "can't be blank";
+        errors.password = false;
+    }else if(passwordHandle.value.length < 6){
+        passwordMsgHandle.innerHTML = "password Should be more than 6 character";
+        errors.password = false;
+    }else if(!passwordFormatter.test(passwordHandle.value)){
+        passwordMsgHandle.innerHTML = "password is invaild";
+        errors.password = false;
+    }else{
+        passwordMsgHandle.innerHTML = "";
+        errors.password = true;
+    }
+  }
+  //},false);
+
+  //passwordConfirmationHandle.addEventListener('blur',function(){
+  function validatePasswordConfirmation(){
+    if(passwordConfirmationHandle.value == ""){
+        passwordConfirmationMsgHandle.innerHTML = "can't be blank";
+        errors.passwordConfirmation = false;
+    }else if(!passwordFormatter.test(passwordConfirmationHandle.value)){
+        passwordConfirmationMsgHandle.innerHTML = "password is invalid";
+        errors.passwordConfirmation = false;
+    }else if(passwordHandle.value !== passwordConfirmationHandle.value ){
+        passwordConfirmationMsgHandle.innerHTML = "password is not matched";
+        errors.passwordConfirmation = false;
+    }else{
+        passwordConfirmationMsgHandle.innerHTML = "";
+        errors.passwordConfirmation = true;
+    }
+  }
+  //},false);
+
+  //firstNamehandle.addEventListener('blur',function(){
+  function validateFirstName(){
+    if(firstNamehandle.value == ""){
+        firstNameMsgHandle.innerHTML = "can't be blank";
+        errors.firstName = false;
+    }else if(!nameFormatter.test(firstNamehandle.value)){
+        firstNameMsgHandle.innerHTML = "Should contain only alphabets";
+        errors.firstName = false;
+    }else{
+        firstNameFormatter.innerHTML = "";
+        errors.firstName = true;
+    }
+  }
+  //},false);
+
+  //lastNamehandle.addEventListener('blur',function(){
+  function validateLastName(){
+    if(lastNamehandle.value == ""){
+        lastNameMsgHandle.innerHTML = "can't be blank";
+        errors.lastName = false;
+    }else if(!nameFormatter.test(lastNamehandle.value)){
+        lastNameMsgHandle.innerHTML = "Should contain only alphabets";
+        errors.lastName = false;
+    }else{
+        lastNameFormatter.innerHTML = "";
+        errors.lastName = true;
+    }
+  }
+  //},false);
+
+  //mobileHandle.addEventListener('blur',function(){
+  function validateMobile(){
+    if(mobileHandle.value == ""){
+        mobileMsgHandle.innerHTML = "can't be blank";
+        errors.mobile = false;
+    }else if(!mobileFormatter.test(mobileHandle.value)){
+        mobileMsgHandle.innerHTML = "should contain only numbers";
+        errors.mobile = false;
+    }else{
+        mobileMsgHandle.innerHTML = "";
+        errors.mobile = true;
+    }
+  }
+  //},false);
+  
+  registerFormHandle.addEventListener('submit',function(e){
+    validateName();
+    validateEmail();
+    validatePassword();
+    validatePasswordConfirmation();
+    validateFirstName();
+    validateLastName();
+    validateMobile();
+
+    if(Object.values(errors).includes(false)){
+      e.preventDefault();
+    }
+  },false);
+
+</script>
