@@ -33,5 +33,4 @@ class SpecialPrice < ActiveRecord::Base
 		end
 	end
 
-
 end

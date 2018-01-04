@@ -1,35 +1,79 @@
-<p id="notice"><%= notice %></p>
+<!-- <p id="notice"><%= notice %></p> -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="page-header">
+        <h1><i class="glyphicon glyphicon-th-list"></i> Listing Cities</h1>
+      </div>
+      <table class="table table-striped" id="cityList" >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th></th>
+          </tr>
+        </thead>
 
-<h1>Listing Cities</h1>
+        <tbody >
+          <% @cities.each do |city| %>
+            <tr id="row_<%=city.id%>">
+              <td><%= link_to city.name, city %></td>
+              <!-- <td><%#= link_to 'Show', city %></td> -->
+              <%if user_signed_in?%>
+                <td><% if can? :update, city %>
+                  <%= link_to edit_city_path(city) do %>
+                        <i class="glyphicon glyphicon-pencil"></i>
+                      <%end%>
+                <% end %>
+                <% if can? :destroy, city%>
+                  <%= link_to city, method: :delete, data: { confirm: 'Are you sure?' },remote: true do %>
+                         <i class="glyphicon glyphicon-trash"></i>
+                  <%end%>
+                <% end %>
+                <%else%>
+                <td></td>
+              <% end %>  
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-2">
 
-<table>
-  <thead>
-    <tr>
-      <th><b style="color:red;">Name</b></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    </div>
 
-  <tbody>
-    <% @cities.each do |city| %>
-      <tr>
-        <td><b style="color:green;"><%= city.name %></b></td>
-        <td><%= link_to 'Show', city %></td>
-        <%if user_signed_in?%>
-        <% if can? :update, city %>
-          <td><%= link_to 'Edit', edit_city_path(city) %></td>
-        <% end %>
-        <% if can? :destroy, city%>
-          <td><%= link_to 'Destroy', city, method: :delete, data: { confirm: 'Are you sure?' } %>
-        <% end %>
-        <% end %>  
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <div class="col-md-4">
+      <% if user_signed_in? && (can? :create, City.new) %>
+         <%#= link_to 'New City', new_city_path %>
+         <div class="page-header">
+            <h1>Add City</h1>
+         </div>
 
-<br>
-<% if user_signed_in? && (can? :create, City.new) %>
-  <%= link_to 'New City', new_city_path %>
-<% end %>
+         <div id="error">
+           
+         </div>
+         <%= render 'form' %>
+      <%end%>
+    </div>
+  </div>
+
+
+  <% if user_signed_in? && current_user.role.id == 1%>
+  <% data = {}
+  @cities.each do |city|
+    data[city.name] = city.rooms.length
+   end%>
+
+   <div class="row">
+    <div class="col-md-6">
+      <h3><b>Pie chart</b></h3>
+      <%= pie_chart(data)%>
+    </div>
+
+    <div class="col-md-6">
+      <h3><b>Column chart</b></h3>
+      <%= column_chart(data)%>
+    </div>
+  </div>
+  <%end%>
+</div>

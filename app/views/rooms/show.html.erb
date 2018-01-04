@@ -1,205 +1,238 @@
-<p id="notice"><%= notice %></p>
+<!-- <p id="notice"><%= notice %></p> -->
+<div class="container">
+  
+  
+      <p>
+        <strong>Name:</strong>
+        <%= @room.name %>
+      </p>
+      <p>Owner name - <%=@room.user.username %></p>
+      <p>
+        <strong>Image:</strong>
+        <%#= image_tag @room.images_url %>
+        <img src="<%=@room.images_url %>" style="width:30cm;height:12cm;">
+      </p><br/>
+  
+      <p>
+        <strong>Description:</strong>
+        <%= @room.description %>
+      </p>
+  <div class="row">
+    <div class="col-md-6">
+      <p>
+        <strong>Price:</strong>
+        <%= @room.price %>
+      </p><br/>
 
-<p>
-  <strong>Name:</strong>
-  <%= @room.name %>
-</p>
-<p>Owner name - <%=@room.user.username %></p>
-<p>
-  <strong>Image:</strong>
-  <%#= image_tag @room.images_url %>
-  <img src="<%=@room.images_url %>" style="width:40cm;height:12cm;">
-</p>
+      <p>
+        <strong>Rules:</strong>
+        <%= @room.rules %>
+      </p><br/>
 
-<p>
-  <strong>Description:</strong>
-  <%= @room.description %>
-</p>
-
-<p>
-  <strong>Price:</strong>
-  <%= @room.price %>
-</p>
-
-<p>
-  <strong>Rules:</strong>
-  <%= @room.rules %>
-</p>
-
-<p>
-  <strong>Address:</strong>
-  <%= @room.address %>
-</p>
-
-
-
-<p>
-  <strong>City:</strong>
-  <%= @room.city.name %>
-</p>
-
-<!-- <p>
-  <strong>User:</strong>
-  <%#= @room.user_id %>
-</p>
- -->
-<p>
-  <strong>Latitude:</strong>
-  <%= @room.latitude %>
-</p>
-
-<p>
-  <strong>Longitude:</strong>
-  <%= @room.longitude %>
-</p>
-
-<p>
-  <strong>Amenities for the room</strong>
-  <% if @room.amenities.empty?%>
-    <p>Their is no amenities for this room</p>
-  <% else %>
-    <ul>
-      <% @room.amenities.each do |amenity| %>
-        <li><%= amenity.name %> - <%= amenity.description %></li>
-      <% end %>
-    </ul>
-  <%end%>
-</p>
+      <p>
+        <strong>Address:</strong>
+        <%= @room.address %>
+      </p><br/>
 
 
-<div class="col-md-5">
-  <div class="page-header">
-    <h2>Location</h2>
+
+      <p>
+        <strong>City:</strong>
+        <%= @room.city.name %>
+      </p><br/>
+
+      <!-- <p>
+        <strong>User:</strong>
+        <%#= @room.user_id %>
+      </p>
+       -->
+      <p>
+        <strong>Latitude:</strong>
+        <%= @room.latitude %>
+      </p><br/>
+
+      <p>
+        <strong>Longitude:</strong>
+        <%= @room.longitude %>
+      </p><br/>
+
+      <p>
+        <strong>Amenities for the room</strong>
+        <% if @room.amenities.empty?%>
+          <p>Their is no amenities for this room</p>
+        <% else %>
+          <ul>
+            <% @room.amenities.each do |amenity| %>
+              <li><%= amenity.name %> - <%= amenity.description %></li>
+            <% end %>
+          </ul>
+        <%end%>
+      </p><br/><br/>
+      <h4>Room Review</h4>
+        <% room=0 %>
+        <% @room.reviews.each do |review|%>
+            <%
+             room = room +(((review.food_rating + review.cleanliness_rating + review.safety_rating + review.facility_rating + review.locality_rating)/5.0).to_f)/(@room.reviews.length) %>
+        <%end%>
+        <h2><%= room.round(1)%></h2>
+
+        <% if can? :update, @room%>
+          <%= link_to 'Edit', edit_room_path(@room) %>|<%= link_to 'Back', rooms_path %>
+        <% end %>
+    </div>
+
+    <div class="col-md-6">  
+      <!-- <div class="col-md-5">
+        <div class="page-header">
+          <h2>Location</h2>
+        </div> -->
+      <iframe width="500"
+        height="450"
+        frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBipgxMczyujD8knh17CWPulk7h2shwOF8&q=<%= @room.name %>,<%= @room.address %>">
+       </iframe>
+    <!-- </div> -->
   </div>
-<iframe width="500"
-  height="450"
-  frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBipgxMczyujD8knh17CWPulk7h2shwOF8&q=<%= @room.name %>,<%= @room.address %>">
- </iframe>
-
-</div>
-
-</div>
+  </div>
 
 
+  <div class="row">
+    <div class="col-md-4">
+      <% if user_signed_in?%>
+      <div class="page-header">
+        <h2>Book Your Room</h2>
+      </div>
 
-<h4>Room Review</h4>
-<% room=0 %>
-<% @room.reviews.each do |review|%>
-    <%
-     room = room +(((review.food_rating + review.cleanliness_rating + review.safety_rating + review.facility_rating + review.locality_rating)/5.0).to_f)/(@room.reviews.length) %>
-<%end%>
-<h2><%= room.round(1)%></h2>
-
-<% if user_signed_in?%>
-<% if can? :update, @room%>
-  <%= link_to 'Edit', edit_room_path(@room) %>
-<% end %>
-
-
-
-<h2>Reviews</h2>
-<% @room.reviews.each do |review|%>
-  <% if current_user.id == review.user_id || (current_user.id == @room.user_id) %>
-  
- 
-  <b>Review:  </b><%= review.review%><br/>
-  <b>Food Rating:  </b><%=review.food_rating%><br/>
-  <b>Cleanliness Rating:  </b><%=review.cleanliness_rating%><br/>
-  <b>Safety Rating:  </b><%=review.safety_rating%><br/>
-  <b>Facility Rating:  </b><%=review.facility_rating%><br/>
-  <b>Locality Rating:  </b><%=review.locality_rating%><br/>
-  <h2>Average:  <%= ((review.food_rating + review.cleanliness_rating + review.safety_rating + review.facility_rating + review.locality_rating)/5.0).to_f %></h2>
-
-<%= link_to "Edit", edit_review_path(review) %> | <%= link_to "Delete", review_path(review.id), method: :delete, data: {confirm:"Are you sure?"}%><br/>
-
-
-  <% end %>
-<%end%>
-
-<% @room.special_prices.each do |spl|%>
-  <% if !(spl.end_date < Date.today) %>
-
-<h2>Your special prices</h2>
-
-<% if @room.special_prices.empty?%>
-  <b>You not added any special prices for your room</b>
-    <%else%>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Start Date</th>
-            <th>End Date </th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%# @room.special_prices.each do |spl|%>
-            <%# if !(spl.end_date < Date.today) %>
-              <tr>
-                <td><%=spl.start_date %></td>
-                <td><%=spl.end_date %></td>
-                <td><%=spl.price %></td>
-              </tr>
-            <%#end%>
-          <%#end%>
-        </tbody>
+      <%= form_for @booking do |f|%>
         
-      </table>
-    <%end%>
+        <label>Start Date</label><br/>
+        <%= f.date_select :start_date, class: "form-control"%><br/>
+        <span id="startDateMsg"></span>
 
-  <%end%>
-<%end%>
+        <label>End Date</label><br/>
+        <%= f.date_select :end_date, class: "form-control"%><br/>
+        <span id="endDateMsg"></span>
+        <% if user_signed_in?%>
+          <% if current_user.role.name == "admin" %>
+              <label></label>User<br/>
+              <%= f.collection_select :user_id, User.all, :id, :username, {prompt: "select"}, {class: "form-control"} %> <br/>
+          <% end %>
+        <%end%>
 
+        <%= f.hidden_field :room_id, value: @room.id %><br/>
 
-<% if @room.user_id == current_user.id%>
+        <%= f.submit "Book", class: "btn btn-primary" %>
+      <%end%>
+      <%end%>
+    </div>
+    
+    <div class="col-md-8">
+    </div>
+  </div>
 
-  <h2>Special prices</h2>
-
-  <%= form_for @special_price do |f|%>
-
-    <label>Start Date</label><br/>
-    <%= f.date_select :start_date%><br/>
-
-    <label>End Date</label><br/>
-    <%= f.date_select :end_date%><br/>
-
-    <label>Price</label><br/>
-    <%= f.number_field :price %><br/>
-
-    <%= f.hidden_field :room_id, value: @room.id %>
-
-    <%= f.submit "Add Special Price"%>
-
-  <% end %>
-<% end %>  
-
-
-
-<h2>Book Your Room</h2>
-
-
-
-<%= form_for @booking do |f|%>
   
-  <label>Start Date</label><br/>
-  <%= f.date_select :start_date%><br/>
-  <span id="startDateMsg"></span><br/>
 
-  <label>End Date</label><br/>
-  <%= f.date_select :end_date%><br/>
-  <span id="endDateMsg"></span><br/>
 
-  <% if current_user.role.name == "admin" %>
-    <label></label>User<br/>
-    <%= f.collection_select :user_id, User.all, :id, :username %> <br/>
-  <% end %>
 
-  <%= f.hidden_field :room_id, value: @room.id %>
 
-  <%= f.submit "Book" %>
-<%end%>
+  <div class="row">
+    <div class="col-md-4">
+        <% if user_signed_in?%>
+        <% @room.special_prices.each do |spl|%>
+        <% if !(spl.end_date < Date.today) %>
+          <div class="page-header">
+            <h2>Special Prices</h2>
+          </div>
 
-<script>
+            <% if @room.special_prices.empty?%>
+                  <b>You not added any special prices for your room</b>
+                    <%else%>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Start Date</th>
+                            <th>End Date </th>
+                            <th>Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <%# @room.special_prices.each do |spl|%>
+                            <%# if !(spl.end_date < Date.today) %>
+                              <tr>
+                                <td><%=spl.start_date %></td>
+                                <td><%=spl.end_date %></td>
+                                <td><%=spl.price %></td>
+                              </tr>
+                            <%#end%>
+                          <%#end%>
+                        </tbody>
+                        
+                      </table>
+                <%end%>
+
+              <%end%>
+            <%end%>
+          <%end%>
+        </div>
+      
+
+      <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+      <% if user_signed_in?%>
+        <% if @room.user_id == current_user.id%>
+        <div class="page-header">
+          <h2>Add Special prices</h2>
+        </div>
+
+          <%= form_for @special_price do |f|%>
+
+            <label>Start Date</label><br/>
+            <%= f.date_select :start_date%><br/>
+
+            <label>End Date</label><br/>
+            <%= f.date_select :end_date%><br/>
+
+            <label>Price</label><br/>
+            <%= f.number_field :price, class: "form-control" %><br/>
+
+            <%= f.hidden_field :room_id, value: @room.id %>
+
+            <%= f.submit "Add Special Price", class: "btn btn-primary"%>
+
+          <% end %>
+        <% end %>
+      <%end%>
+    </div>
+  </div>  
+
+    
+
+<div class="row">
+  <div class="col-md-8">
+  <% if @room.reviews.any?%>
+  <div class="page-header">
+    <h2>Reviews</h2>
+  </div>
+    <% @room.reviews.each do |review|%>
+     <!-- <%# if current_user.id == review.user_id || (current_user.id == @room.user_id) %> -->
+      
+  
+      <b>Review:  </b><%= review.review%><br/>
+      <b>Food Rating:  </b><%=review.food_rating%><br/>
+      <b>Cleanliness Rating:  </b><%=review.cleanliness_rating%><br/>
+      <b>Safety Rating:  </b><%=review.safety_rating%><br/>
+      <b>Facility Rating:  </b><%=review.facility_rating%><br/>
+      <b>Locality Rating:  </b><%=review.locality_rating%><br/>
+      <h2>Average:  <%= ((review.food_rating + review.cleanliness_rating + review.safety_rating + review.facility_rating + review.locality_rating)/5.0).to_f %></h2>
+    <% if user_signed_in? && (current_user.id == review.user_id) %>
+      <%#= link_to "Edit", edit_review_path(review) %>  <%#= link_to "Delete", review_path(review.id), method: :delete, data: {confirm:"Are you sure?"}%><br/>
+      <%end%>
+    <% end %>
+  <%end%>
+</div>
+
+
+<!-- <script>
 
   var startDateHandle = document.getElementById('booking_start_date');
   var endDateHandle = document.getElementById('booking_end_date');
@@ -229,90 +262,247 @@
   },false);
   
 </script>
+ -->
 
-<% end %>
-
+<div class="col-md-4">
 <% if can? :create, Review.new %>
 
 <% if user_signed_in? && (current_user.bookings.any?)%>
   <% @room.bookings.each do |booking|%>
     <% if booking.user_id == current_user.id%>
       <% if booking.end_date <= Date.today%>
-
-      <h2>Review</h2>
+      <div class="page-header">
+        <h2>Add Review</h2>
+      </div>
 
       <%= form_for(@review) do |f| %>
         
 
-        <div class="field">
+        <div class="field" >
           <%= f.label :review %><br/>
-          <%= f.text_area :review %>
+          <%= f.text_area :review, class: "form-control" %>
           <span id="reviewMsg"></span>
         </div>
-        <div class="field">
+        <div class="field" id="food">
           <%= f.label :food_rating %><br/>
           <%=f.radio_button :food_rating, 1 %> 1
           <%=f.radio_button :food_rating, 2 %> 2
           <%=f.radio_button :food_rating, 3 %> 3
           <%=f.radio_button :food_rating, 4 %> 4
-          <%=f.radio_button :food_rating, 5 %> 5<br/>
+          <%=f.radio_button :food_rating, 5 %> 5
+          <span id="foodMsg"></span><br/>
         </div>
-        <div class="field">
+        <div class="field" id="cleanliness">
           <%= f.label :cleanliness_rating %><br/>
           <%=f.radio_button :cleanliness_rating, 1 %> 1
           <%=f.radio_button :cleanliness_rating, 2 %> 2
           <%=f.radio_button :cleanliness_rating, 3 %> 3
           <%=f.radio_button :cleanliness_rating, 4 %> 4
-          <%=f.radio_button :cleanliness_rating, 5 %> 5<br/>
+          <%=f.radio_button :cleanliness_rating, 5 %> 5
+          <span id="cleanlinessMsg"></span><br/>
         </div>
-        <div class="field">
+        <div class="field" id="safety">
           <%= f.label :safety_rating %><br/>
           <%=f.radio_button :safety_rating, 1 %> 1
           <%=f.radio_button :safety_rating, 2 %> 2
           <%=f.radio_button :safety_rating, 3 %> 3
           <%=f.radio_button :safety_rating, 4 %> 4
-          <%=f.radio_button :safety_rating, 5 %> 5<br/>
+          <%=f.radio_button :safety_rating, 5 %> 5
+          <span id="safetyMsg"></span><br/>
         </div>
-        <div class="field">
+        <div class="field" id="facility">
           <%= f.label :facility_rating %><br/>
           <%=f.radio_button :facility_rating, 1 %> 1
           <%=f.radio_button :facility_rating, 2 %> 2
           <%=f.radio_button :facility_rating, 3 %> 3
           <%=f.radio_button :facility_rating, 4 %> 4
-          <%=f.radio_button :facility_rating, 5 %> 5<br/>
+          <%=f.radio_button :facility_rating, 5 %> 5
+          <span id="facilityMsg" ></span><br/>
         </div>
-        <div class="field">
+        <div class="field" id="locality">
           <%= f.label :locality_rating %><br/>
           <%=f.radio_button :locality_rating, 1 %> 1
           <%=f.radio_button :locality_rating, 2 %> 2
           <%=f.radio_button :locality_rating, 3 %> 3
           <%=f.radio_button :locality_rating, 4 %> 4
-          <%=f.radio_button :locality_rating, 5 %> 5<br/>
+          <%=f.radio_button :locality_rating, 5 %> 5
+          <span id="localityMsg"></span><br/>
         </div>
 
           <%= f.hidden_field :room_id, value:@room.id %>
-
-          <%= f.submit "Add Review" %>
+          <div>
+          <%= f.submit "Add Review", id: "add_submit", class: "btn btn-primary" %>
+          </div>
       <% end %>
       <%end%>
     <%end%>
   <%end%>
 <%end%>
 <%end%>
+</div>
+</div>
 
-<%= link_to 'Back', rooms_path %>
 
 <script>
-        reviewHandle = document.getElementById('review_review');
-        reviewMsgHandle = document.getElementById('reviewMsg');
+        var reviewHandle = document.getElementById('review_review');
 
-        reviewHandle.addEventListener('blur',function(){
+        var foodHandle = document.getElementById('food');
+        var cleanlinessHandle = document.getElementById('cleanliness');
+        var safetyHandle = document.getElementById('safety');
+        var facilityHandle = document.getElementById('facility');
+        var localityHandle = document.getElementById('locality');
+
+        var foodInputs = foodHandle.getElementsByTagName('input');
+        var cleanlinessInputs = cleanlinessHandle.getElementsByTagName('input');
+        var safetyInputs = safetyHandle.getElementsByTagName('input');
+        var facilityInputs = facilityHandle.getElementsByTagName('input');
+        var localityInputs = localityHandle.getElementsByTagName('input');
+
+        var foodMsgHandle = document.getElementById('foodMsg');
+        var cleanlinessMsgHandle = document.getElementById('cleanlinessMsg');
+        var safetyMsgHandle = document.getElementById('safetyMsg');
+        var facilityMsgHandle = document.getElementById('facilityMsg');
+        var localityMsgHandle = document.getElementById('localityMsg');
+        var reviewMsgHandle = document.getElementById('reviewMsg');
+
+        var reviewFormHandle = document.getElementById('new_review');
+
+        var submitHandle = document.getElementById('add_submit');
+        console.log(submitHandle);
+
+
+
+        var errors = {
+          review: false,
+          food: false,
+          cleanliness: false,
+          safety: false,
+          locality: false,
+          facility: false
+        }
+        
+        reviewHandle.addEventListener('keypress',function(){
+          if(reviewHandle.value.length < 150){
+            console.log(reviewHandle.value.length)
+            submitHandle.disabled = true;
+          }else{
+            submitHandle.disabled = false;
+          }
+        },false);
+
+        function validateName(){
+        // reviewHandle.addEventListener('blur',function(){
           if(reviewHandle.value == ""){
               reviewMsgHandle.innerHTML = "can't be blank";
+              errors.review = false;
           }else if(reviewHandle.value.length < 150){
               reviewMsgHandle.innerHTML = "review should be more than 150 characters";
+              errors.review = false;
           }else{
               reviewMsgHandle.innerHTML = "";
+              errors.review = true;
+          }
+        // },false);
+        }
+
+        function validateFood(){
+         // foodHandle.addEventListener('click',function(){
+          foodSelected = 0;
+          for(var i = 0; i < foodInputs.length; i++){
+            if(foodInputs[i].checked){
+              foodSelected = foodInputs[i].value;
+            }
+          }
+          console.log(foodSelected);
+          if(foodSelected == 0){
+            foodMsgHandle.innerHTML = "Select Rating from 1 to 5";
+            errors.food = false;
+          }else{
+            foodMsgHandle.innerHTML = "";
+             errors.food = true;
+          }
+         // },false);
+        }
+
+        function validateCleanliness(){
+          cleanlinessSelected = 0;
+          for(var i = 0; i < cleanlinessInputs.length; i++){
+            if(cleanlinessInputs[i].checked){
+              cleanlinessSelected = cleanlinessInputs[i].value;
+            }
+          }
+          console.log(cleanlinessSelected);
+          if(cleanlinessSelected == 0){
+            cleanlinessMsgHandle.innerHTML = "Select Rating from 1 to 5";
+            errors.cleanliness = false;
+          }else{
+            cleanlinessMsgHandle.innerHTML = "";
+             errors.cleanliness = true;
+          }
+        }
+
+        function validateSafety(){
+          safetySelected = 0;
+          for(var i = 0; i < safetyInputs.length; i++){
+            if(safetyInputs[i].checked){
+              safetySelected = safetyInputs[i].value;
+            }
+          }
+          console.log(safetySelected);
+          if(safetySelected == 0){
+            safetyMsgHandle.innerHTML = "Select Rating from 1 to 5";
+            errors.safety = false;
+          }else{
+            safetyMsgHandle.innerHTML = "";
+             errors.safety = true;
+          }
+        }
+
+        function validateFacility(){
+          facilitySelected = 0;
+          for(var i = 0; i < facilityInputs.length; i++){
+            if(facilityInputs[i].checked){
+              facilitySelected = facilityInputs[i].value;
+            }
+          }
+          console.log(facilitySelected);
+          if(facilitySelected == 0){
+            facilityMsgHandle.innerHTML = "Select Rating from 1 to 5";
+            errors.facility = false;
+          }else{
+            facilityMsgHandle.innerHTML = "";
+             errors.facility = true;
+          }
+        }
+
+        function validateLocality(){
+          localitySelected = 0;
+          for(var i = 0; i < localityInputs.length; i++){
+            if(localityInputs[i].checked){
+              localitySelected = localityInputs[i].value;
+            }
+          }
+          console.log(localitySelected);
+          if(localitySelected == 0){
+            localityMsgHandle.innerHTML = "Select Rating from 1 to 5";
+            errors.locality = false;
+          }else{
+            localityMsgHandle.innerHTML = "";
+             errors.locality = true;
+          }
+        }
+
+        reviewFormHandle.addEventListener('submit',function(e){
+
+          validateName();
+          validateFood();
+          validateCleanliness();
+          validateSafety();
+          validateFacility();
+          validateLocality();
+
+          if(Object.values(errors).includes(false)){
+            e.preventDefault();
           }
         },false);
 </script>

@@ -109,29 +109,29 @@ class Booking < ActiveRecord::Base
 		price = []
 
 		special_bookings = SpecialPrice.where('room_id=?', self.room_id)
-		binding.pry
+		#binding.pry
 		special_bookings.each do |sdate|
 			special_booking = (sdate.start_date..sdate.end_date).to_a
 
 			if !(current_booking&special_booking).empty?
-				binding.pry
+				#binding.pry
 				price << (current_booking&special_booking).count * sdate.price
 				current_booking -= special_booking
-				binding.pry
+				#binding.pry
 			end
 		end
 
 		if price.empty?
 			special_booking_price = 0
-			binding.pry
+			#binding.pry
 		else
 			special_booking_price = price.inject(:+)
-			binding.pry
+			#binding.pry
 		end
 
 		normal_day_cost = (current_booking.length) * self.room.price
 		self.price = (special_booking_price + normal_day_cost)
-		binding.pry
+		#binding.pry
 
 
 	end

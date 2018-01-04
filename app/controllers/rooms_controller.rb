@@ -7,8 +7,9 @@ class RoomsController < ApplicationController
   # GET /rooms.json
   def index
     #@rooms = Room.all
+    @roooms = Room.new
     @rooms = Room.where('is_authorized=?', true)
-    @room = Room.paginate(:page => params[:page], :per_page => 5)
+    @room = Room.paginate(:page => params[:page], :per_page =>2)
   end
 
   # GET /rooms/1
@@ -38,6 +39,7 @@ class RoomsController < ApplicationController
     binding.pry
     respond_to do |format|
       @room.user_id = current_user.id
+      binding.pry
       if @room.save
         binding.pry
         format.html { redirect_to @room, notice: 'Room was successfully created.' }

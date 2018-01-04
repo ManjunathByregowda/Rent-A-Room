@@ -1,0 +1,6 @@
+<%if @city.errors.any?%>
+	$('#error').html("<%= escape_javascript render('errors')%>")
+<%else%>
+	$('#cityList').append("<%= escape_javascript render('city')%>")
+	$('#new_city')[0].reset();
+<%end%>

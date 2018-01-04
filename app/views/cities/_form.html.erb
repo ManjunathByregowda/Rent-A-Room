@@ -1,21 +1,61 @@
-<%= form_for(@city) do |f| %>
-  <% if @city.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@city.errors.count, "error") %> prohibited this city from being saved:</h2>
+<div class="container">
+<div class="col-md-4">
+  <%= form_for(@city, remote: true) do |f| %>
+    <% if @city.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@city.errors.count, "error") %> prohibited this city from being saved:</h2>
 
-      <ul>
-      <% @city.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+        <ul>
+        <% @city.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :name %><br>
+      <%= f.text_field :name, class: "form-control" %>
+      <span id="name"></span>
+    </div>
+    <div class="actions">
+      <%= f.submit "Add City", class: "btn btn-primary" %>
     </div>
   <% end %>
+</div>
+</div>
+<script>
+  var nameHandle = document.getElementById('city_name');
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+  var nameMsgHandle = document.getElementById('name');
+
+  var cityFormHandle = document.getElementById('new_city');
+
+  var errors = {
+    name: false
+  } 
+
+  var nameFormatter = /^[a-zA-Z ]*$/;
+
+  function  validateName(){
+    if(nameHandle.value == ""){
+      nameMsgHandle.innerHTML = "can't be blank";
+      errors.name = false;
+    }else if(!nameFormatter.test(nameHandle.value)){
+      nameMsgHandle.innerHTML = "It should contain only alphabets";
+      errors.name = false;
+    }else{
+      nameMsgHandle.innerHTML = "";
+      errors.name = true;
+    }
+  }
+
+  cityFormHandle.addEventListener('submit',function(e){
+    validateName();
+
+    if(Object.values(errors).includes(false)){
+      e.preventDefault();
+
+  }
+  },false);
+</script>

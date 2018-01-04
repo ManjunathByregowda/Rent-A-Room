@@ -12,5 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+//= require chartkick
 //= require_tree .
+
+
+$(document).ready(function(){
+    $('#amenityList').DataTable();
+    $('#cityList').DataTable();
+    $('#roomsList').DataTable();
+    $('#room_city_id').chosen();
+});

@@ -1,0 +1,17 @@
+<tr id="row_<%=@city.id%>">
+  <td><%= link_to @city.name, @city %></td>
+              <!-- <td><%#= link_to 'Show', @city %></td> -->
+  <%if user_signed_in?%>
+  <% if can? :update, @city %>
+    <td><%= link_to edit_city_path(@city) do %>
+      <i class="glyphicon glyphicon-pencil"></i>
+    <%end%>
+  <% end %>
+  <% if can? :destroy, @city%>
+    <%= link_to @city, method: :delete, data: { confirm: 'Are you sure?' }, remote: true do %>
+      <i class="glyphicon glyphicon-trash"></i>
+    <%end%>
+  <% end %>
+              <% end %>  
+  </td>
+</tr>

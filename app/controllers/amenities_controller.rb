@@ -6,6 +6,7 @@ class AmenitiesController < ApplicationController
   # GET /amenities
   # GET /amenities.json
   def index
+    @amenity = Amenity.new
     @amenities = Amenity.all
   end
 
@@ -33,9 +34,11 @@ class AmenitiesController < ApplicationController
       if @amenity.save
         format.html { redirect_to @amenity, notice: 'Amenity was successfully created.' }
         format.json { render :show, status: :created, location: @amenity }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @amenity.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -61,6 +64,7 @@ class AmenitiesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to amenities_url, notice: 'Amenity was successfully destroyed.' }
       format.json { head :no_content }
+      format.js
     end
   end
 

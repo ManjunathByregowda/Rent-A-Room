@@ -1,6 +1,6 @@
 class City < ActiveRecord::Base
 
-	has_many :rooms
+	has_many :rooms, dependent: :destroy
 
 	extend FriendlyId
   	friendly_id :name, use: [:slugged, :finders]

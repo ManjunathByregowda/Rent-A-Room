@@ -1,36 +1,58 @@
-<p id="notice"><%= notice %></p>
+<!-- <p id="notice"><%= notice %></p> -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1><i class="glyphicon glyphicon-th-list"></i> Listing Amenities</h1>
+      </div>
+      <% if can? :read, Amenity %>
+        <table class="table" id="amenityList">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
 
-<h1>Listing Amenities</h1>
-<% if can? :read, Amenity %>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th colspan="3"></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @amenities.each do |amenity| %>
-        <tr>
-          <td><%= amenity.name %></td>
-          <td><%= amenity.description %></td>
-          <td><%= link_to 'Show', amenity %></td>
-          <%if user_signed_in?%>
-          <% if can? :update, amenity %>
-            <td><%= link_to 'Edit', edit_amenity_path(amenity) %></td>
-          <% end %>
-          <% if can? :destoy, amenity %>
-            <td><%= link_to 'Destroy', amenity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <% end %> 
-          <%end%> 
-        </tr>
+          <tbody>
+            <% @amenities.each do |amenity| %>
+              <tr id="row_<%=amenity.id%>"%>
+                <td><%= link_to amenity.name, amenity %></td>
+                <td><%= amenity.description %></td>
+                <!-- <td><%#= link_to 'Show', amenity %></td> -->
+                <%if user_signed_in?%>
+                <% if can? :update, amenity %>
+                  <td><%= link_to edit_amenity_path(amenity) do %>
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    <%end%>                <% end %>
+                <% if can? :destoy, amenity %>
+                  <%= link_to amenity, method: :delete, data: { confirm: 'Are you sure?' }, remote: true do %>
+                      <i class="glyphicon glyphicon-trash"></i>
+                    <%end%>
+                  </td>
+                <% end %> 
+                <%end%> 
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       <% end %>
-    </tbody>
-  </table>
-<% end %>
-<br>
-<% if user_signed_in? && (can? :create, Amenity.new) %>
-  <%= link_to 'New Amenity', new_amenity_path %>
-<% end %>
+    </div>
+
+
+    <div class="col-md-4">
+      <% if user_signed_in? && (can? :create, Amenity.new) %>
+
+        <div class="page-header">
+          <h1>Add Amenities</h1>
+        </div>
+        <%#= link_to 'New Amenity', new_amenity_path %>
+        <div id="errors">
+          
+        </div>
+        <%= render 'form' %>
+      <% end %>
+    </div>
+  </div>
+</div>

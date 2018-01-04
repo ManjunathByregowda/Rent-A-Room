@@ -1,0 +1,7 @@
+<% if @amenity.errors.any?%>
+	$('#errors').append("<%= escape_javascript render('errors')%>")
+<%else%>
+	$('#amenityList').append("<%= escape_javascript render('amenity') %>");
+	$('#new_amenity')[0].reset();
+	$('#errors').html("");
+<%end%>

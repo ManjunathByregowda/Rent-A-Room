@@ -6,6 +6,7 @@ class CitiesController < ApplicationController
   # GET /cities
   # GET /cities.json
   def index
+    @city = City.new
     @cities = City.all
   end
 
@@ -34,9 +35,11 @@ class CitiesController < ApplicationController
       if @city.save
         format.html { redirect_to @city, notice: 'City was successfully created.' }
         format.json { render :show, status: :created, location: @city }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @city.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -62,6 +65,7 @@ class CitiesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to cities_url, notice: 'City was successfully destroyed.' }
       format.json { head :no_content }
+      format.js
     end
   end
 

@@ -1,24 +1,13 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Rooms</h1>
+<!-- <p id="notice"><%= notice %></p> -->
+<div class="container">
+  <div class="col-md-6">
+<h1><i class="glyphicon glyphicon-th-list"></i> Listing Rooms</h1>
 
 <!-- <div id="low_to_high">Low to High</div>
 <div id="high_to_low">High to Low</div> -->
 
-<select>
-  <option value="low" id="low_to_high">Low to High</option>
-  <option value="high" id="high_to_low">High to Low</option>
-</select>
-
-<div id="rooms">
-   <% City.all.each do |city| %>
-    <%= radio_button_tag "city", city.id %> 
-    <label for="<%= city.name %>"> <%= city.name %> </label>
-   <% end %>
-</div><br/>
-
 <%# if @rooms.is_authorized == true%>
-  <table border="1">
+  <table class="table table-striped" id="roomsList">
     <thead>
       <tr>
         <th><b style="color:red;">Name</b></th>
@@ -32,16 +21,16 @@
         <th>User</th>
         <th>Latitude</th>
         <th>Longitude</th> -->
-        <th colspan="3"><b style="color:red;">Action</b></th>
+        <th></th>
       </tr>
     </thead>
 
-    <tbody>
-      <ul id="roomsList">
+    <tbody >
+      <ul>
         <% @rooms.each do |room| %>
           <tr>
             <%# if !room.is_authorized == false%>
-              <td><b style="color:blue;"><%= room.name %></b></td>
+              <td><b style="color:blue;"><%= link_to room.name, room %></b></td>
               <!-- <td><%= room.description %></td>
               <td><%= room.price %></td>
               <td><%= room.rules %></td> -->
@@ -53,13 +42,19 @@
               <td><%= room.latitude %></td>
               <td><%= room.longitude %></td> -->
 
-              <td><%= link_to 'Show', room %></td>
+              
               <% if user_signed_in?%>
                 <% if can? :update, room%>
-                  <td><%= link_to 'Edit', edit_room_path(room) %></td>
+                  <td><%= link_to edit_room_path(room) do %>
+                        <i class="glyphicon glyphicon-pencil"></i>
+                      <%end%>
                 <% end %>
                 <% if can? :destroy, room%>
-                  <td><%= link_to 'Destroy', room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  <%= link_to room, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                        <i class="glyphicon glyphicon-trash"></i>
+                    <%end%>
+                    
+                  </td>
                 <% end %>
               <%end%>
               <%# end %>
@@ -74,13 +69,38 @@
 <br>
 
 <% if user_signed_in? && (can? :create, Room.new)%>
-  <%= link_to 'New Room', new_room_path %>
+  <%= link_to  new_room_path, class: "btn btn-primary"  do%>
+      <i class="glyphicon glyphicon-plus"></i> Add Room
+  <%end%>
 <% end %>
+
+</div>
+
+<div class="col-md-6">
+
+  
+    
+     <div id="low_to_high">Low to High</div>
+     <div id="high_to_low">High to Low</div>
+  
+
+<div id="rooms">
+   <% City.all.each do |city| %>
+    <%#= radio_button_tag "city", city.id %>
+    <%= check_box_tag city.name, city.id %> 
+    <label for="<%= city.name %>"> <%= city.name %> </label>
+   <% end %>
+</div><br/>
+
 
 <title>Google Maps Multiple Markers</title>
   <script src="http://maps.google.com/maps/api/js?key=AIzaSyCzbuY_r3-Uj_RIBsxfKP0WqluXS8dTo5o"></script>
   <div id="map" style="height: 400px; width: 500px;">
 </div>
+
+
+
+
 <script>
   
 
@@ -109,7 +129,7 @@
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          // infowindow.setContent(locations[i][0]);
+          infowindow.setContent(locations[i][0]);
           infowindow.open(map, marker);
         }
       })(marker, i));
@@ -140,7 +160,7 @@
 
   }
 
-  lowHandle.addEventListener('change',function(){
+  lowHandle.addEventListener('click',function(){
 
     xhr = new XMLHttpRequest();
     xhr.open('GET', '../ajax/low_to_high');
@@ -153,7 +173,7 @@
     xhr.send();
   },false);
 
-  highHandle.addEventListener('change',function(){
+  highHandle.addEventListener('click',function(){
     xhr = new XMLHttpRequest();
     xhr.open('GET', '../ajax/high_to_low');
     xhr.onreadystatechange = function(){
@@ -170,14 +190,14 @@
     // console.log(roomInput);
 
     roomsHandle.addEventListener('click',function(){
-      var roomSelected = 0;
+      var roomSelected = [];
       for(var i = 0; i < roomInput.length; i++){
       if(roomInput[i].checked){
-        roomSelected = roomInput[i].value;
+        roomSelected.push(roomInput[i].value);
       }
     }
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '../ajax/find_by_city?city_id=' + roomSelected);
+      xhr.open('GET', '../ajax/find_by_city?city_ids=' + roomSelected.join(","));
       xhr.onreadystatechange = function(){
         if(xhr.readyState == 4 && xhr.status == 200){
           roomHtml(JSON.parse(xhr.responseText));
@@ -186,3 +206,5 @@
       xhr.send();
     },false);
 </script>
+</div>
+</div>

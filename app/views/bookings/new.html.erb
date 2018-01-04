@@ -1,29 +1,31 @@
-<% if @booking.errors.any? %>
-    <h3>These are validations failed: </h3>
-    <ul>
-      <% @booking.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
-<% end %>
+<div class="container">
+  <% if @booking.errors.any? %>
+      <h3>These are validations failed: </h3>
+      <ul>
+        <% @booking.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+  <% end %>
 
-<%= form_for @booking do |f|%>
-  
-  <label>Start Date</label><br/>
-  <%= f.date_select :start_date%><br/>
+  <%= form_for @booking do |f|%>
+    
+    <label>Start Date</label><br/>
+    <%= f.date_select :start_date, class: "form-control" %><br/>
 
-  <label>End Date</label><br/>
-  <%= f.date_select :end_date%><br/>
+    <label>End Date</label><br/>
+    <%= f.date_select :end_date%><br/>
 
-  <%= f.hidden_field :room_id, value: @booking.room.id %>
+    <%= f.hidden_field :room_id, value: @booking.room.id %>
 
-  <%= f.submit "Book" %>
-<%end%>
-
-<% @booking.room.bookings.each do |sd|%>
-  <%if !(sd.end_date < Date.today) %>
-    <h2> This Room is not avilable at </h2>
-
-    <li><b><%= sd.start_date %></b>  to  <b><%= sd.end_date %></b></li>
+    <%= f.submit "Book", class: "btn btn-primary" %>
   <%end%>
-<%end%> 
+
+  <% @booking.room.bookings.each do |sd|%>
+    <%if !(sd.end_date < Date.today) %>
+      <h2> This Room is not avilable at </h2>
+
+      <li><b><%= sd.start_date %></b>  to  <b><%= sd.end_date %></b></li>
+    <%end%>
+  <%end%> 
+</div>

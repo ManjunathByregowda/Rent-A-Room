@@ -10,7 +10,11 @@ class AjaxController < ApplicationController
   end
 
   def find_by_city
-  	@rooms = Room.where('city_id = ?', params[:city_id])
+    if params[:city_ids] != ""
+  	  @rooms = Room.where(city_id: params[:city_ids].split(","))
+    else
+      @rooms = Room.all
+    end
   	render json: @rooms
   end
 end

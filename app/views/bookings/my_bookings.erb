@@ -1,37 +1,43 @@
-<h2> All my Bookings </h2>
+<div class="container">
+	<div class="col-md-8">
+		<div class="page-header">
+        	<h2><i class="glyphicon glyphicon-th-list"></i> All my Bookings </h2>
+    	</div>
 
-<% if @bookings.empty? %>
-	<b>You have no bookings for any room</b>
-<% else %>
-	<table border="1">
-		<thead>
-			<tr>
-				<th>Room Name</th>
-				<th>Start Date</th>
-				<th>End Date</th>
-				<th>Price</th>
-				<th>Confirmation</th>
-			</tr>			
-		</thead>
-		<tbody>
-			<% @bookings.each do |book| %>
-				<tr>
-					<td><%= book.room.try(:name)%></td>
-					<td><%= book.start_date %></td>
-					<td><%= book.end_date %></td>
-					<td><%= book.price %></td>
-					<td><% if book.is_confirmed? %>
-							Yes
-						<%else%>
-							No
-						<%end%>
-					</td>
-				</tr>
-			<%end%>
-		</tbody>
-	</table>
-	
-<% end %>
+		<% if @bookings.empty? %>
+			<b style="color:red">You have not booked for any room</b>
+		<% else %>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Room Name</th>
+						<th>Start Date</th>
+						<th>End Date</th>
+						<th>Price</th>
+						<th>Confirmation</th>
+					</tr>			
+				</thead>
+				<tbody>
+					<% @bookings.each do |book| %>
+						<tr>
+							<td><%= book.room.try(:name)%></td>
+							<td><%= book.start_date %></td>
+							<td><%= book.end_date %></td>
+							<td><%= book.price %></td>
+							<td><% if book.is_confirmed? %>
+									Yes
+								<%else%>
+									No
+								<%end%>
+							</td>
+						</tr>
+					<%end%>
+				</tbody>
+			</table>
+			
+		<% end %>
+	</div>
+</div>
 
 
 

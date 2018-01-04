@@ -1,25 +1,80 @@
-<%= form_for(@amenity) do |f| %>
-  <% if @amenity.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@amenity.errors.count, "error") %> prohibited this amenity from being saved:</h2>
+<div class="container">
+  <div class="col-md-4">
+  <%= form_for(@amenity, remote: true) do |f| %>
+    <% if @amenity.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@amenity.errors.count, "error") %> prohibited this amenity from being saved:</h2>
 
-      <ul>
-      <% @amenity.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+        <ul>
+        <% @amenity.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :name %><br>
+      <%= f.text_field :name, class: "form-control" %>
+      <span id="name"></span>
+    </div>
+    <div class="form-group">
+      <%= f.label :description %><br>
+      <%= f.text_area :description, class: "form-control" %>
+      <span id="description"></span>
+    </div>
+    <div class="actions" >
+      <%= f.submit "Submit", class: "btn btn-primary" %>
     </div>
   <% end %>
+</div>
+</div>
+<script>
+  
+  var nameHandle = document.getElementById('amenity_name');
+  var descriptionHandle = document.getElementById('amenity_description');
+  var amenityFormHandle = document.getElementById('new_amenity');
+  var nameMsgHandle = document.getElementById('name');
+  var descriptionMsgHandle = document.getElementById('description');
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+  var errors = {
+    name: false,
+    description: false
+  }
+
+  function validateName(){
+    if(nameHandle.value == ""){
+      nameMsgHandle.innerHTML = "can't be blank";
+      errors.name = false;
+    }else if(nameHandle.value.length < 5){
+      nameMsgHandle.innerHTML = "should be more than 5 character";
+      errors.name = false;
+    }else{
+      nameMsgHandle.innerHTML = "";
+      errors.name = true;
+    }
+  }
+
+  function validateDescription(){
+    if(descriptionHandle.value == ""){
+      descriptionMsgHandle.innerHTML = "can't be blank";
+      errors.description = false;
+    }else if(descriptionHandle.value.length <25){
+      descriptionMsgHandle.innerHTML = "it should be more than 25 characters";
+      errors.description = false;
+    }else{
+      descriptionMsgHandle.innerHTML = "";
+      errors.description = true;
+    }
+  }
+
+amenityFormHandle.addEventListener('submit',function(e){
+  validateName();
+  validateDescription();
+  
+  if(Object.values(errors).includes(false)){
+    e.preventDefault();
+  }
+},false);
+
+</script>

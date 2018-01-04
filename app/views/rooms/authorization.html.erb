@@ -1,18 +1,23 @@
-<h2>Not authorized Rooms</h2>
-<% if can? :authorization, Room %>
-	<% if @rooms.empty?%>
-		<b>All the rooms are authorized </b>
-	<%else%>
-		<ul>
-			<% @rooms.each do |room|%>
-				<li><%= link_to room.name, room_path(room.slug) %> - <%=room.address%> - <%=room.city.name%> - <%=room.price%></li>
+<div class="container">
+	<div class="page-header">
+        <h2><i class="glyphicon glyphicon-th-list"></i> Not authorized Rooms</h2>
+    </div>
 
-				<%= form_for room do |f|%>
+	<% if can? :authorization, Room %>
+		<% if @rooms.empty?%>
+			<b>All the rooms are authorized </b>
+		<%else%>
+			<ul>
+				<% @rooms.each do |room|%>
+					<li><%= link_to room.name, room_path(room.slug) %> - <%=room.address%> - <%=room.city.name%> - <%=room.price%></li>
 
-					<%= f.hidden_field :is_authorized, value:"true" %>
-					<%=f.submit "authorize Room" %> 
+					<%= form_for room do |f|%>
+
+						<%= f.hidden_field :is_authorized, value:"true" %>
+						<%=f.submit "authorize Room", class: "btn btn-primary" %><br/><br/> 
+					<%end%>
 				<%end%>
-			<%end%>
-		</ul>
+			</ul>
+		<%end%>
 	<%end%>
-<%end%>
+</div>

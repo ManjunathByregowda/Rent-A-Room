@@ -1,0 +1,18 @@
+<tr id="row_<%=@amenity.id%>"%>
+  <td><%= link_to @amenity.name, @amenity %></td>
+  <td><%= @amenity.description %></td>
+  <!-- <td><%#= link_to 'Show', @amenity %></td> -->
+  <%if user_signed_in?%>
+    <% if can? :update, @amenity %>
+      <td><%= link_to edit_amenity_path(@amenity) do %>
+        <i class="glyphicon glyphicon-pencil"></i>
+        <%end%>
+    <% end %>
+  <% if can? :destoy, @amenity %>
+    <%= link_to @amenity, method: :delete, data: { confirm: 'Are you sure?' }, remote: true do %>
+        <i class="glyphicon glyphicon-trash"></i>
+      <%end%>
+    </td>
+  <% end %> 
+  <%end%> 
+</tr>

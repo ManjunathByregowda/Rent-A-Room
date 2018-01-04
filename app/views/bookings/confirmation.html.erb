@@ -1,4 +1,9 @@
-<h2>Not confirmed Rooms</h2>
+<div class="container">
+	<div class="col-md-8">
+		<div class="page-header">
+        	<h2><i class="glyphicon glyphicon-th-list"></i> Not confirmed Rooms</h2>
+    	</div>
+	
 
 
 	<% if @bookings.empty?%>
@@ -11,7 +16,7 @@
 					<li><%= link_to book.room.name, room_path(book.room.slug) %> - <%=book.room.address%> - <%=book.room.city.name %></li>
 					Guest Name :- <%= book.user.username%>
 
-					<table border="1">
+					<table class="table">
 						<thead>
 							<tr>
 								<th>Start Date</th>
@@ -29,10 +34,12 @@
 					<%= form_for book do |f|%>
 
 						<%= f.hidden_field :is_confirmed, value:"true" %>
-						<%=f.submit "confirm Room" %> 
+						<%=f.submit "confirm Room", class: "btn btn-primary" %> 
 					<%end%>
 				<% end %>
 				<%end%>
 			<%end%>
 		</ul>
 	<%end%>
+</div>
+</div>
